@@ -44,7 +44,23 @@ h1 {
   margin-left: 10px;
 }
 
+.task-form button:hover {
+  background: #218838;
+}
 
+.task-list {
+  list-style: none;
+  padding: 0;
+}
+
+.task-list li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.task-list li:last-child {
+  border-bottom: none;
+}
 
 
 
