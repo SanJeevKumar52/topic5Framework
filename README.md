@@ -1,5 +1,1 @@
-### Installation & Setup
-1.git clone
-2.cd directory name 
-3.npm install
-4. npm start
+![image](https://github.com/user-attachments/assets/6b804d7c-f22d-47e4-af84-bb1710aec005)
