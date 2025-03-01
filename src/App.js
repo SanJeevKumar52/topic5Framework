@@ -1,21 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-function App() {
 
-  const [tasks, setTasks] = useState([]);
+function App() {
+  const [tasks, setTasks] = useState(() => {
+    
+    // Load tasks from localStorage only on initial render
+    return JSON.parse(localStorage.getItem('tasks')) || [];
+  });
+
   const [newTask, setNewTask] = useState('');
 
-  // Function to handle adding a new task
- const addTask = ()=>{
-  if (newTask.trim() === '') return; // Prevent adding empty tasks 
+  // Save tasks to localStorage whenever tasks change
+  useEffect(() => {
+    if (tasks.length > 0) {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+  }, [tasks]);
 
-  const task = {
-    id: Date.now(), // Unique ID based on timestamp
-    text: newTask,
+  const addTask = () => {
+    if (newTask.trim() === '') return;
+    const task = { id: Date.now(), text: newTask };
+    setTasks([...tasks, task]);
+    setNewTask('');
   };
-  setTasks([...tasks, task]); // Add the new task to the list
-  setNewTask(''); // Clear the input field
- };
+
+  const deleteTask = (id) => {
+    const updatedTasks = tasks.filter(task => task.id !== id);
+    setTasks(updatedTasks);
+    localStorage.setItem('tasks', JSON.stringify(updatedTasks)); // Update storage on delete
+  };
 
   return (
     <div className="App">
@@ -23,15 +36,20 @@ function App() {
       <div className="task-form">
         <input
           type="text"
+          value={newTask}
+          onChange={(e) => setNewTask(e.target.value)}
           placeholder="Add a new task"
         />
-        <button onClick={addTask} >Add Task</button>
-        <ul className="task-list">
+        <button onClick={addTask}>Add Task</button>
+      </div>
+      <ul className="task-list">
         {tasks.map(task => (
-          <li key={task.id}>{task.text}</li>
+          <li key={task.id}>
+            <span>{task.text}</span>
+            <button onClick={() => deleteTask(task.id)}>Delete</button>
+          </li>
         ))}
       </ul>
-      </div>
     </div>
   );
 }
